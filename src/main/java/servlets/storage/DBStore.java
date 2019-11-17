@@ -3,7 +3,8 @@ package servlets.storage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import servlets.models.FootballPosition;
 import servlets.models.Player;
 import java.util.Collection;
@@ -15,20 +16,14 @@ import java.util.function.Function;
  * @since 25.10.2019.
  * @author Alexander Beznos (ast1bn@mail.ru)
  */
+@Repository
 public class DBStore implements Store {
-    private static final DBStore INSTANCE = new DBStore();
+
     private SessionFactory factory;
 
-    /**
-     * При создании объекта DbStore создается пул соединений(при помощи BasicDataSource) с базой данных.
-     * Создается таблица в базе данных для храниения информации об игроках.
-     */
-    private DBStore() {
-        factory = new Configuration().configure().buildSessionFactory();
-    }
-
-    public static DBStore getInstance() {
-        return INSTANCE;
+    @Autowired
+    public DBStore(SessionFactory sessionFactory) {
+        this.factory = sessionFactory;
     }
 
     private <T> T doFunction(final Function<Session, T> command) throws PlayerValidationException {
@@ -69,7 +64,7 @@ public class DBStore implements Store {
     }
 
     /**
-     * Метод создаёт и выполняет запрос на добавление нового игрока в БД.
+     * Метод создаёт и редактирует игрока в БД.
      * Игроку присваивается уникальный номер.
      */
     @Override
@@ -78,7 +73,7 @@ public class DBStore implements Store {
     }
 
     /**
-     * Метод создает и выполняет запрос на удаление игрока в БД.
+     * Метод удаляет игрока из БД.
      */
     @Override
     public void delete(int id) throws PlayerValidationException {
@@ -87,7 +82,7 @@ public class DBStore implements Store {
     }
 
     /**
-     * Метод получает всех игроков в БД.
+     * Метод получает всех игроков из БД.
      */
     @Override
     public Collection<Player> findAll() throws PlayerValidationException {
@@ -95,7 +90,7 @@ public class DBStore implements Store {
     }
 
     /**
-     * Метод создает и выполняет запрос по поиску игрока по id в БД.
+     * Метод ищет игрока по id в БД.
      */
     @Override
     public Player findById(int id) throws PlayerValidationException {
@@ -103,6 +98,9 @@ public class DBStore implements Store {
         return (Player) doFunction(tmp -> tmp.createQuery(query).getSingleResult());
     }
 
+    /**
+     * Метод получает позиции игроков из БД.
+     */
     @Override
     public Collection<FootballPosition> findAllPositions() throws PlayerValidationException {
         return doFunction(tmp -> tmp.createQuery("from FootballPosition").list());

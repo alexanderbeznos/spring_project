@@ -3,25 +3,19 @@ package servlets.storage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import servlets.models.User;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Repository
 public class DBUsers {
     private SessionFactory factory;
-    private static final DBUsers INSTANCE = new DBUsers();
 
-    /**
-     * При создании объекта DbStore создается пул соединений(при помощи BasicDataSource) с базой данных.
-     * Создается таблица в базе данных для храниения информации об игроках.
-     */
-    private DBUsers() {
-        factory = new Configuration().configure().buildSessionFactory();
-    }
-
-    public static DBUsers getInstance() {
-        return INSTANCE;
+    @Autowired
+    private DBUsers(SessionFactory sessionFactory) {
+        this.factory = sessionFactory;
     }
 
     private void doVoid(final Consumer<Session> command) throws UserValidationException {

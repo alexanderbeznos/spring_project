@@ -1,5 +1,7 @@
 package servlets.validation;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import servlets.models.User;
 import servlets.storage.DBUsers;
 import servlets.storage.UserValidationException;
@@ -9,26 +11,26 @@ import servlets.storage.UserValidationException;
  * @since 29.10.2019.
  * @author Alexander Beznos (ast1bn@mail.ru)
  */
+
+@Service
 public class ValidateServiceUsers {
     /**
      * Ссылка на объект DBStore.
      */
-    private final DBUsers objectStore = DBUsers.getInstance();
-    private static final ValidateServiceUsers INSTANCE =  new ValidateServiceUsers();
+    private DBUsers dbUsers;
 
-    private ValidateServiceUsers() {
+    @Autowired
+    private ValidateServiceUsers(DBUsers dbUsers) {
+        this.dbUsers = dbUsers;
     }
 
-    public static ValidateServiceUsers getInstance() {
-        return INSTANCE;
-    }
 
     /**
      * Метод для добавления пользователя в БД.
      * @param user пользователя для добавления
      */
     public void addOrUpdate(User user) throws UserValidationException {
-        this.objectStore.addOrUpdate(user);
+        this.dbUsers.addOrUpdate(user);
     }
 
     /**
@@ -36,6 +38,6 @@ public class ValidateServiceUsers {
      * @param login номер пользователя игрока.
      */
     public User findByLogin(String login) throws UserValidationException {
-        return this.objectStore.findByLogin(login);
+        return this.dbUsers.findByLogin(login);
     }
 }

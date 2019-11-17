@@ -1,5 +1,6 @@
 package servlets.validation;
 
+import servlets.models.FootballPosition;
 import servlets.models.Player;
 import servlets.storage.PlayerValidationException;
 
@@ -14,5 +15,6 @@ public interface Validate {
     void addOrUpdate(Player player) throws PlayerValidationException;
     void delete(int id) throws PlayerValidationException;
     Collection<Player> findAll() throws PlayerValidationException;
+    Collection<FootballPosition> findAllPositions() throws PlayerValidationException;
     Player findById(int id) throws PlayerValidationException;
 }

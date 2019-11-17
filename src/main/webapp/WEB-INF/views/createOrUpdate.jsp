@@ -1,4 +1,4 @@
-
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://bootswatch.com/4/simplex/bootstrap.css" media="screen">
     <link rel="stylesheet" href="https://bootswatch.com/_assets/css/custom.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <title>Add Player</title>
+    <title>Form Player</title>
 
     <script>
         $(document).ready(function () {
@@ -21,7 +21,7 @@
 
     <script>
         function getCountries (data) {
-            var arr = data['countries'];
+            var arr = data;
             for (i = 0; i < arr.length; i++){
                 var country = arr[i];
                 var opt = document.createElement('option');
@@ -40,9 +40,10 @@
             type: 'POST',
             url:'./clubs',
             data: countryVal,
+            contentType: "text/plain",
             datatype: 'json',
             success: function (data, status, settings) {
-                var arr = data['clubs'];
+                var arr = data;
                 for (var i = 0; i < arr.length; i++) {
                     var country = arr[i];
                     var opt = document.createElement('option');
@@ -83,7 +84,7 @@
 
     <script>
         function getPosition (data) {
-            var arr = data['collection'];
+            var arr = data;
             for (i = 0; i < arr.length; i++){
                 var poz = arr[i];
                 var opt = document.createElement('option');
@@ -99,39 +100,40 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-5 offset-sm-3">
-            <form action="${pageContext.request.contextPath}/addPlayer" method="post">
+            <form:form action="${pageContext.request.contextPath}/playerForm" modelAttribute="player" method="post">
+                <form:input path="id" name="id" type="hidden"/>
                 <div class="form-group">
                     <label for="Name">Name</label>
-                    <input type="text" class="form-control" id="Name" name="name" placeholder="Enter name">
+                    <form:input path="name" type="text" class="form-control"  placeholder="Enter name"/>
                 </div>
                 <div class="form-group">
                     <label for="lastName">Last name</label>
-                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name">
+                    <form:input path="lastName" type="text" class="form-control"  placeholder="Enter last name"/>
                 </div>
                 <div class="form-group">
                     <label for="marketValue">Market value</label>
-                    <input type="text" class="form-control" id="marketValue" name="marketValue" placeholder="Enter market value">
+                    <form:input path="marketValue" type="text" class="form-control"  placeholder="Enter market value"/>
                 </div>
                 <div class="form-group">
                     <label for="country">Country</label>
-                    <select class="form-control" id="country" name="country" onchange="getClubs()">
+                    <form:select path="country" class="form-control" id="country"  onchange="getClubs()">
                         <option value="" disabled selected> Select your option</option>
-                    </select>
+                    </form:select>
                 </div>
                 <div class="form-group">
                     <label for="clubs">Club</label>
-                    <select class="form-control" id="clubs" name="club">
+                    <form:select path="club" class="form-control" id="clubs" >
                         <option value="" disabled selected> Select your option</option>
-                    </select>
+                    </form:select>
                 </div>
                 <div class="form-group">
                     <label for="area">Position</label>
-                    <select class="form-control" id="area" name="area">
+                    <form:select path="position.id" class="form-control" id="area" >
                         <option value="" disabled selected> Select your option</option>
-                    </select>
+                    </form:select>
                 </div>
-                <button type="submit" class="btn btn-primary">Add player</button>
-            </form>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form:form>
         </div>
     </div>
 </div>

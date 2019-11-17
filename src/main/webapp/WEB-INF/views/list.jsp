@@ -10,14 +10,8 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-8 offset-sm-2">
-            <form action="${pageContext.request.contextPath}/logOut" method="get">
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log out</button>
-                </div>
-            </form>
             <br/>
-            <br/>
-            <form action="${pageContext.request.contextPath}/addPlayer" method="get">
+            <form action="${pageContext.request.contextPath}/playerForm" method="get">
                 <button type="submit" class="btn btn-primary">Add player</button>
             </form>
             <table class="table table-hover" id="table">
@@ -41,12 +35,9 @@
                             <td><c:out value="${player.club}"/></td>
                             <td><c:out value="${player.position.name}"/></td>
                             <td>
-                                <form action="${pageContext.request.contextPath}/updatePlayer" method="get">
+                                <form action="${pageContext.request.contextPath}/updatePlayerForm" method="get">
                                     <input type="submit" value="Update">
                                     <input name="id" type="hidden" value="<c:out value="${player.id}"/>"/>
-                                    <input name="name" type="hidden" value="<c:out value="${player.name}"/>"/>
-                                    <input name="lastName" type="hidden" value="<c:out value="${player.lastName}"/>"/>
-                                    <input name="marketValue" type="hidden" value="<c:out value="${player.marketValue}"/>"/>
                                 </form>
                             </td>
                             <td>

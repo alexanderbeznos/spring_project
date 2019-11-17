@@ -1,9 +1,11 @@
 package servlets.validation;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import servlets.models.FootballPosition;
 import servlets.models.Player;
 import servlets.storage.DBStore;
 import servlets.storage.PlayerValidationException;
-import servlets.storage.Store;
 
 import java.util.Collection;
 
@@ -12,19 +14,17 @@ import java.util.Collection;
  * @since 25.10.2019.
  * @author Alexander Beznos (ast1bn@mail.ru)
  */
+@Service
 public class ValidateService implements Validate {
 
     /**
      * Ссылка на объект DBStore.
      */
-    private final Store objectStore = DBStore.getInstance();
-    private static final ValidateService INSTANCE =  new ValidateService();
+    private DBStore dbStore;
 
-    private ValidateService() {
-    }
-
-    public static Validate getInstance() {
-        return INSTANCE;
+    @Autowired
+    public ValidateService(DBStore dbStore) {
+        this.dbStore = dbStore;
     }
 
     /**
@@ -33,7 +33,7 @@ public class ValidateService implements Validate {
      */
     @Override
     public void addOrUpdate(Player player) throws PlayerValidationException {
-        this.objectStore.addOrUpdate(player);
+        this.dbStore.addOrUpdate(player);
     }
 
     /**
@@ -42,7 +42,7 @@ public class ValidateService implements Validate {
      */
     @Override
     public void delete(int id) throws PlayerValidationException {
-        this.objectStore.delete(id);
+        this.dbStore.delete(id);
 
     }
 
@@ -51,7 +51,16 @@ public class ValidateService implements Validate {
      */
     @Override
     public Collection<Player> findAll() throws PlayerValidationException {
-        Collection<Player> result = this.objectStore.findAll();
+        Collection<Player> result = this.dbStore.findAll();
+        return result;
+    }
+
+    /**
+     * Метод возвращает список всех позиций.
+     */
+    @Override
+    public Collection<FootballPosition> findAllPositions() throws PlayerValidationException {
+        Collection<FootballPosition> result = this.dbStore.findAllPositions();
         return result;
     }
 
@@ -61,6 +70,6 @@ public class ValidateService implements Validate {
      */
     @Override
     public Player findById(int id) throws PlayerValidationException {
-        return this.objectStore.findById(id);
+        return this.dbStore.findById(id);
     }
 }
